@@ -89,7 +89,7 @@ Let's practice on the `PhindAccessHackathon2020` repository.
 
 ## Tracking files by git 
 
-Now that you have a git repository, you may start to modify its content while keep tracking the modifications that you have made. The upmost directory of the repository hierarchy , i.e. `PhindAccessHackathon2020` is called the ***Master*** under which there is 
+Now that you have a git repository, you may start to modify its content while keep tracking the modifications that you have made. The upmost directory of the repository hierarchy , i.e. `PhindAccessHackathon2020`. 
 
 1. go to the `gitTutorial` directory
 
@@ -99,7 +99,7 @@ Now that you have a git repository, you may start to modify its content while ke
    $ git status
    ```
 
-3. Now we will add a new file to the `gitTutorial` directory. There are plenty of ways to do that in Unix Os perhaps the easiest is to create an empty file first. The name of the file should be your `name_surname`. Remember, don't use spaces as this is highly non recommended. 
+3. Now we will add a new file to the `gitTutorial` directory. There are plenty of ways to do that in Unix Os perhaps the easiest is to create an empty file using the `touch` command. The name of the file should be your `name_surname`. Remember, don't use spaces as this is highly non recommended. 
 
    ```
    $ touch name_surname
@@ -107,7 +107,7 @@ Now that you have a git repository, you may start to modify its content while ke
 
 4. The file `name_surname` is now created inside `gitTutorial`. You can check that with `ls` command. 
 
-5. If you run the command `git status` again you will notice that the returned message is different from the previous one. `git` tells you that a file has been added. By default `git` does not track the changings automatically, so you have to tell it to do strt tracking the file `name_surname` that you have created earlier. 
+5. If you run the command `git status` again you will notice that the returned message is different from the previous one. `git` tells you that a file has been added. By default `git` does not track the changing automatically, so you have to tell it to do start tracking the file `name_surname` that you have created earlier. 
 
    ```sh
    $ git add name_surname
@@ -115,7 +115,7 @@ Now that you have a git repository, you may start to modify its content while ke
 
 6. If you type `git status` again, it will tell you that the `name_surname` file is now tracked by git. 
 
-At some level you would have to track multiple files at once or all the files in one directory. Using the wild card feature can save you alot of time by avoid tracking the files one by one. The following command add all the files in a directory to the tracking system.
+At some level you would have to track multiple files at once or all the files in one directory. Using the wild card feature can save you a lot of time by avoid tracking the files one by one. The following command add all the files in a directory to the tracking system.
 
 ```sh
 $ git status *
@@ -233,11 +233,205 @@ It makes sens because we have one central copy of the project hosted in GitHub.
 
 To wrap it all, we can make the pushing to the `master` branch to the repository at the remote name `origin`
 
+```sh
+$ git push origin master
+Username for 'https://github.com': hothman
+Password for 'https://hothman@github.com': 
+Counting objects: 11, done.
+Delta compression using up to 12 threads.
+Compressing objects: 100% (9/9), done.
+Writing objects: 100% (11/11), 5.31 KiB | 1.06 MiB/s, done.
+Total 11 (delta 4), reused 0 (delta 0)
+remote: Resolving deltas: 100% (4/4), completed with 1 local object.
+To https://github.com/hothman/PhindAccessHackathon2020.git
+   aed7d13..40b245c  master -> master
+
 ```
-git push origin master
+
+You will be able to check if the push is successful by looking to the updated repository in GitHub by clicking on the commits button and check if your committing message is there. 
+
+### Pulling from a Git remote repository
+
+Pulling from the remote repository will enable you to include the modifications made by your collaborators in your local repository. It can also be done in the same fashion of pushing. 
+
+```sh
+$ git pull origin master
+From https://github.com/hothman/PhindAccessHackathon2020
+ * branch            master     -> FETCH_HEAD
+Already up to date.
 ```
 
+I am getting this message because no one is modifying the content `PhindAccessHackathon2020` as I write this tutorial. 
 
+### Managing conflicts in Git
 
+Conflicts occur when for example two users that made a pull from the same repository snapshot, modify the same content of a file differently. Then only the first one to make the push to the remote repository will succeed and the second user will get a merge conflict message. 
 
+Lets suppose user-1 and 2 made the pulling of the same snapshot of the remote repository. The original content of a file called ``poem.txt` is the following.
+
+```
+--- By Jalalouddine al Rumi---
+If you are irritated by every rub 
+how will you ever get polished
+```
+
+ The first user made the modifications of the file `poem.txt` by inserting two verses and made the commit and push to the remote repository before user-2.
+
+```
+--- By Jalalouddine al Rumi---
+If you are irritated by every rub 
+how will you ever get polished
+Every moment I shape my destiny with a chisel
+I am a carpenter of my own soul
+```
+
+User-2 modify `poem.txt` differently 
+
+```
+--- By Jalalouddine al Rumi---
+If you are irritated by every rub 
+how will you ever get polished
+Beauty unveils His exquisite form
+in the solitude of nothingness
+```
+
+You notice that the verses 3 and 4 in the file are not the same between the two users. User-1 can successfully make the commit but when he wants to push to the remote repository he will get the following message. 
+
+```sh
+$ git push origin master
+To https://github.com/hothman/PhindAccessHackathon2020.git
+ ! [rejected]        master -> master (fetch first)
+error: failed to push some refs to 'https://github.com/hothman/PhindAccessHackathon2020.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+```
+
+Git cannot make the push because the snapshot in user-2 repository is no longer the same as the remote repository since user-1 already made a push. In this message, git simply asks user-2 to pull the new updates from the remote repository. 
+
+```sh
+$ git pull origin master
+remote: Enumerating objects: 7, done.
+remote: Counting objects: 100% (7/7), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 4 (delta 1), reused 4 (delta 1), pack-reused 0
+Unpacking objects: 100% (4/4), done.
+From https://github.com/hothman/PhindAccessHackathon2020
+   81cc8a5..ff8218d  master     -> origin/master
+Auto-merging gitTutorial/poem.txt
+CONFLICT (content): Merge conflict in gitTutorial/poem.txt
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+The returned message implies that Git is not able to push the modifications of user-2 because of the conflict with the current snapshot of the remote repository. 
+
+There aren't really golden rules to manage conflicts in a git repository. At the basic level, resolving the conflict can be summarised in these four steps. 
+
+1. Use `git status` to find the conflicting file(s).
+2. Open and edit those files manually to a version that fixes the conflict.
+3. Use git add to tell Git that you’ve resolved the conflict in a particular file.
+4. Once all conflicts are resolved, use `git status` to check that all changes are staged. Then, commit the resolved versions of the conflicting file(s). It’s also wise to immediately push this merge commit, so your collaborators see that you’ve resolved a conflict and can continue their work on this new version accordingly.
+
+Let's apply this in our example: 
+
+1. First we apply `git status`
+
+   ```sh
+   $ git status 
+   On branch master
+   Your branch and 'origin/master' have diverged,
+   and have 1 and 1 different commits each, respectively.
+     (use "git pull" to merge the remote branch into yours)
+   
+   You have unmerged paths.
+     (fix conflicts and run "git commit")
+     (use "git merge --abort" to abort the merge)
+   
+   Unmerged paths:
+     (use "git add <file>..." to mark resolution)
+   
+   	both modified:   poem.txt
+   
+   no changes added to commit (use "git add" and/or "git commit -a")
+   ```
+
+   The output message point out to a conflict in the file `poem.txt` . The type of the conflict indicated by `both modified` shows that there are two different instances of `poem.txt` . Noting that there are other types of conflicts like `both deleted`, `both added` and `added by them`. 
+
+2. If we take a look to the `poem.txt` file we will see that git added some indicators for you to spot the conflicting lines after you have made the last pull. The following content is what we would get if we open the file in a text editor.
+
+   ```
+   --- By Jalalouddine al Rumi---
+   If you are irritated by every rub 
+   how will you ever get polished
+   <<<<<<< HEAD
+   Every moment I shape my destiny with a chisel
+   I am a carpenter of my own soul
+   =======
+   Beauty unveils His exquisite form
+   in the solitude of nothingness
+   >>>>>>> ff8218d912c006f6fd0b81ca1a4a5c4182fabc19
+   ```
+
+   `Head` indicates the starting of our version
+
+   `=======` Indicates the end of HEAD and beginning of user-1 changes.
+
+   `>>>>>>>` Indicates the end of HEAD of user-1 version and the corresponding SHA-1 checksum number to his commit.
+
+3. What you have to do is to manage the conflict in these lines. You can decide by yourself or you can discuss that with your collaborator to understand the reasons of his modifications and yours and come to an agreement. In our case we decided to put all the verses of the poem such in this way: 
+
+   ```
+   --- By Jalalouddine al Rumi---
+   If you are irritated by every rub
+   how will you ever get polished
+   Every moment I shape my destiny with a chisel
+   I am a carpenter of my own soul
+   Beauty unveils His exquisite form
+   in the solitude of nothingness
+   ```
+
+   Once we do that, we stage the modifications using `git add poem.txt`
+
+4. The last step is to commit the modifications and push to the remote repository. But first, we can make sure that we have solved all the conflicts using `git status`
+
+   ```sh
+   $ git status
+   On branch master
+   Your branch and 'origin/master' have diverged,
+   and have 1 and 1 different commits each, respectively.
+     (use "git pull" to merge the remote branch into yours)
+   
+   All conflicts fixed but you are still merging.
+     (use "git commit" to conclude merge)
+   
+   Changes to be committed:
+   
+   	modified:   poem.txt
+   ```
+
+   Everything is sorted out and you can see that from the message `All conflicts fixed but you are still merging.` 
+
+   Now we can commit and push to the remote repository. 
+
+   ```sh
+   $ git commit -m "Solving conflict in poem.txt"
+   git push origin master
+   ```
+
+   
+
+ ## Summary
+
+* It is better to create a single directory that contains all the files related to a project.
+* You can start tracking the modifications made in a project directory using Git. To do so, you can initialise the tracking sing `git init` command from the highest folder in the hierarchy of the project or by cloning a previously created project from a remote repository using `git clone <adress to the remote repository>.`
+* `git status` helps you to check the tracking of your repository. 
+* A commit is the unit of tracking using a version control system. 
+* A commit can be achieved by three steps: modifying (can use any operation or tools applied on file(s)), staging (`git add <your modified file(s)>`) and committing (`git commit -m "A message to summarise the commit"`)
+* You can upload your modifications to a remote repository with `git push`
+* You can update your local repository with `git pull`
+* Managing the conflicts can be made in four steps. It is primarily based on manual intervention. 
+
+  
 
