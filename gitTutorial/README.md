@@ -6,8 +6,6 @@ As an example, let's suppose that you built a workflow that counts the proportio
 
 The following tutorial will help you to start using `git` and to understand its fundamental concepts. It is very easy to start using `git` but it make take some time to master all its functionalities. Like everything in the world, regular practice maybe your best choice to reach mastery. 
 
-
-
 ## Installing `git`
 
 On a Debian Linux distribution you can install git by the following command : 
@@ -28,7 +26,7 @@ To keep the traceability of your code or any file in the project’s directory, 
 
 ```sh
 $ git config --global user.name "Hay Ben Yakdhan"
-$ git config --global user.email "byakdhan@tales.org"
+$ git config --global user.email "yakdhan@tales.org"
 ```
 
 ## Creating a `git` repository
@@ -75,7 +73,171 @@ First, you can start a new project from a created directory. For example, the di
 
 **Cloning** is copying the content of an existing repository. Typically, repositories are hosted on remote servers (can be your Institute computing facility or a server from a local network). Perhaps cloning is most frequently done from one of the version control web hosting services like [GitHub](https://github.com/), [Bitbucket](https://www.atlassian.com/software/bitbucket/enterprise/data-center) or [GitLab](https://about.gitlab.com/) where an administrator creates a repository and makes it accessible to specific users. This is the case of all the repositories for the *PhindAccess Hackathon*.
 
-Let's practice on one of the projects repository that are hosted on Github. 
+Let's practice on the `PhindAccessHackathon2020` repository. 
+
+1. A repository is most often hosted remotely, so the fist step for *cloning* is to get an address to the `PhindAccessHackathon2020` repository that is recognised by `git`. First point your browser to the URL address of the repository on GitHub `https://github.com/hothman/PhindAccessHackathon2020`
+
+2. In the main page click on the button that says *Code*. A message box will pop out . Copy the address.  
+
+3. Open a terminal window and then enter the command 
+
+   ```bash
+   $ git clone <adress_to_phinaccesshachathon_repo>  
+   ```
+
+4. `git` will then download the content of the repository in your local machine under the directory name  `PhindAccessHackathon2020`
+
+## Tracking files by git 
+
+Now that you have a git repository, you may start to modify its content while keep tracking the modifications that you have made. The upmost directory of the repository hierarchy , i.e. `PhindAccessHackathon2020` is called the ***Master*** under which there is 
+
+1. go to the `gitTutorial` directory
+
+2. `git` enables you to get a summary of all the modifications that have been made in a directory. To do so for `gitTutorial` type the command : 
+
+   ```sh
+   $ git status
+   ```
+
+3. Now we will add a new file to the `gitTutorial` directory. There are plenty of ways to do that in Unix Os perhaps the easiest is to create an empty file first. The name of the file should be your `name_surname`. Remember, don't use spaces as this is highly non recommended. 
+
+   ```
+   $ touch name_surname
+   ```
+
+4. The file `name_surname` is now created inside `gitTutorial`. You can check that with `ls` command. 
+
+5. If you run the command `git status` again you will notice that the returned message is different from the previous one. `git` tells you that a file has been added. By default `git` does not track the changings automatically, so you have to tell it to do strt tracking the file `name_surname` that you have created earlier. 
+
+   ```sh
+   $ git add name_surname
+   ```
+
+6. If you type `git status` again, it will tell you that the `name_surname` file is now tracked by git. 
+
+At some level you would have to track multiple files at once or all the files in one directory. Using the wild card feature can save you alot of time by avoid tracking the files one by one. The following command add all the files in a directory to the tracking system.
+
+```sh
+$ git status *
+```
+
+## Staging 
+
+Along the project you will made modifications to the content of the tracked files. Changes made to a tracked file will not automatically be recorded by `git`. Think about staging as preparing for recording the changes. It’s important to be aware that any modifications made to a file since the last time it
+was staged will not be included in the next 'recording' of the modifications unless they are staged. This extra step may seem like an inconvenience but actually has many benefits.
+
+1.  `git status`  will tell you that a new file `name_surname` is currently tracked
+
+   ```
+   On branch master
+   Your branch is ahead of 'origin/master' by 2 commits.
+     (use "git push" to publish your local commits)
+   
+   Changes to be committed:
+     (use "git reset HEAD <file>..." to unstage)
+   
+   	new file:   name_surname
+   
+   Changes not staged for commit:
+     (use "git add/rm <file>..." to update what will be committed)
+     (use "git checkout -- <file>..." to discard changes in working directory)
+   ```
+
+   
+
+2.  Open the `name_surname` file and add a phrase of your favourite quote. Mine is, *In God we trust. all others bring data* then save the file.
+
+3. You now realise the importance of the `git status` command. If you use it again `git`will tell you that the file `name_surname` has been modified but it is still not staged. 
+
+   ```
+   On branch master
+   Your branch is ahead of 'origin/master' by 2 commits.
+     (use "git push" to publish your local commits)
+   
+   Changes to be committed:
+     (use "git reset HEAD <file>..." to unstage)
+   
+   	new file:   jhon_snow
+   
+   Changes not staged for commit:
+     (use "git add/rm <file>..." to update what will be committed)
+     (use "git checkout -- <file>..." to discard changes in working directory)
+   
+   	modified:   name_surname
+   
+   ```
+
+   So If we want to record what modifications we have made in the `name_surname` file, as we will see in the next section, you would not be able to do that since the `name_surname` file is not yet staged. Luckily you don't have to use anything special to make the staging of the `name_surname` file. Simply you can use the previous command
+
+```sh
+$ git add name_surname
+```
+
+4. Use `git status` and you will notice that no file has to be staged. 
+
+## Committing
+
+We kept talking in the last paragraph about "recording the modifications". This is a very superficial equivalent to what we call ***Committing*** in `git` and it is the fundamental unit of change in `git`. In other words, a repository state, is described by the series of committed modifications that have been made starting from the first time it was created. A commit is like taking is snapshot of your entire project.
+
+Committing your staged modifications is quite easy and it is made by the following command. You only thing that you have to provide is a descriptive message that summarises the modifications that you have made in the staging process. 
+
+```bash
+$ git commit -m "Adding the file name_surname, and fill it with my favorite quote"
+```
+
+Ideally commits should reflect relevant snapshots of the project. You don't want to commit every single line of a code. Equally, you don't want to commit a staging that include your work of the last two months. Both practices well make it difficult to you to distinguish relevant modifications in the repository. 
+
+A list of commits that have been made can be find in the log file and you can navigate through them using the following command: 
+
+```sh
+$ git log 
+commit aca62abafff5b3640ae88fe744a3e583bf8e4294
+Author: hothman <houcemoo@gmail.com>
+Date:   Sun Aug 23 12:46:20 2020 +0200
+
+   Adding the file name_surname, and fill it with my favorite quote
+
+```
+
+The most recent commit is found at the top of the log.  The strange looking number is called the SHA-1 checksum and it is a unique identifier for each commit.  Information regarding the author of the commit, the time and date, as well as the committing message are given. 
+
+## Collaborating with Git
+
+When you work with different collaborators, you often share a remote repository hosted elsewhere. This could be on GitHub, Bitbucket or you institute server. You may modify the working repository at different stages of the workflow. Therefore, you need to update the shared repository with the modifications that you have made and some times, you need to update your local copy of the project repository with the modifications made by the other users. These two operations are respectively called **pushing** and **pulling**. 
+
+### Pushing to a Git remote repository
+
+If you have cloned the repository `PhindAccessHackathon2020` and made the modifications described earlier in the previous sections, then you would be able to push the `name_surname` file containing your favourable quote to the remote repository on GitHub. To do so you can use git as follows: 
+
+```
+git push <remote-name> <branch>
+```
+
+Branches in Git are snapshots of the repository for which the developing line has been deviated from the original branch. branches can be created independently from the main branch which is the master. To get the list of the branches, you can enter the following command: 
+
+```sh
+$ git branch
+* master
+```
+
+The output message tells you that we have only the `master` branch. 
+
+Remote repositories are versions of your project that are hosted on the Internet or network somewhere. You can access the list of remote names as follows 
+
+```sh
+$ git remote 
+origin
+```
+
+It makes sens because we have one central copy of the project hosted in GitHub. 
+
+To wrap it all, we can make the pushing to the `master` branch to the repository at the remote name `origin`
+
+```
+git push origin master
+```
+
+
 
 
 
