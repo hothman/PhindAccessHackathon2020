@@ -64,7 +64,7 @@ First, you can start a new project from a created directory. For example, the di
 
    ```bash
    $ ls --all 
-   .  ..  .git Bitbucket
+   .  ..  .git 
    ```
 
    A hidden directory with name `.git`(The dot prefix is specific for hidden files in Unix, you can verify that by entering `ls` command with no argument) has been created in the directory `COVID-Tn`. Everything related to tracking the changes in your repository is managed by `git`  through the `.git` directory. Evidently, you don't want to delete or change any thing in `.git` otherwise you will corrupt git functionality.
