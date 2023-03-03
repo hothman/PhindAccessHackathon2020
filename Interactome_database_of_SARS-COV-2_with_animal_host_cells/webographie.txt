@@ -1,0 +1,13 @@
+SARS-CoV-2 human host protein protein interactions used here and integrated in this project were retrieved from:
+
+https://pubmed.ncbi.nlm.nih.gov/34655901/
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8277549/
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8123524/
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8102073/
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8040492/
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7987008/
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7791351/
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7682973/
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7432461/
+
+
