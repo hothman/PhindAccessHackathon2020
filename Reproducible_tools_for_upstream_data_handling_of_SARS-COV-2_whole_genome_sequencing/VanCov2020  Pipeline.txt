@@ -1,0 +1,67 @@
+#####Mapping to host genome
+bwa mem -t 10 /path/to/host/reference/genome/hg38.fullAnalysisSet.fa ../02-preprocessing/{sample_id}/{sample_id}_R1_filtered.fastq.gz ../02-preprocessing/{sample_id}/{sample_id}_R2_filtered.fastq.gz > {sample_id}/{sample_id}.sam
+samtools view -b {sample_id}/{sample_id}.sam > {sample_id}/{sample_id}.bam
+samtools sort -o {sample_id}/{sample_id}_sorted.bam -O bam -T {sample_id}/{sample_id} {sample_id}/{sample_id}.bam
+samtools index {sample_id}/{sample_id}_sorted.bam
+########## Extracting unaligned reads from the BAM file
+samtools sort -@ 8 <human.sam> -o <human.bam> -O BAM
+samtools view -u -f 4 -F264<human.bam>
+> temp1.bam
+samtools view -u -f 8 -F 260
+<human.bam> > temp2.bam
+samtools view -u -f 12 -F 256<
+human.bam> > temp3.bam
+samtools merge -u - temp[123].bam |
+samtools sort -n -o <unmapped.bam>
+########Converting the BAM file to FASTQ file 
+bamToFastq -i <unmapped.bam> -fq <unmapped.fq>
+######Alignment to the viral reference genome 
+hisat2 -x
+<NC_045512.2_viral_reference_genome> -
+#####Generating a consensus sequence 
+samtools sort -@ 8 <covid.sam> -o
+<covid.bam> -O BAM
+samtools faidx
+<covid_reference_genome>
+samtools mpileup -uf
+<covid_reference_genome> <covid.bam> |
+bcftools call -c | vcfutils.pl vcf2fq
+> <consensus.fq>
+seqtk seq -aQ64 -q20 -n N
+<consensus.fq> > <consensus.fasta>
+U <unmapped.fq> -S <covid.sam> -p 16 -
+-dta-cufflinks --summary-file <unmapped.log>
+#### Variant call/samtools
+samtools mpileup -uf
+<covid_reference_genome> <covid.bam> |
+bcftools call -cv -Ob > <variant.bcf>
+bcftools view <variant.bcf> >
+<variant.vcf>
+
+##### Variant call/varscan
+samtools mpileup -f
+<covid_reference_genome> <covid.bam> >
+<covid.pileup>
+java -jar VarScan.v2.4.4.jar
+mpileup2cns <covid.pileup> --outputvcf 1 --variants><covid.vcf>
+#### Variant annotation
+snpEff sars-cov-2 ../06-variant_calling/${sample_id}.vcf > ${sample_id}.ann.vcf
+###### De Novo assembly of the viral reference genome/Spades
+python spades.py -t <8> -s
+<unmapped.fq> -o
+<spades_output_folder>
+###### De novo assembly of the viral ref geno/Megahit
+./megahit -r <unmapped.fq> -o
+<denovo_covid_genome>
+##### De novo Assembly/Unicycler
+unicycler -t 10 -o {sample_id} -1 ../02-preprocessing/{sample_id}/{sample_id}_R1_filtered.fastq.gz -2 ../02-preprocessing/{sample_id}/{sample_id}_R2_filtered.fastq.gz
+#####Contig ordering and draft generation
+abacas.pl -r ../../../../REFERENCES/NC_045512.2.fasta -q ../../09-assembly/{sample_id}/{sample_id}/{sample_id}_scaffolds.fasta -m -p nucmer -o {sample_id}_abacas
+####Alignement
+abacas.pl -r ../../../../REFERENCES/NC_045512.2.fasta -q ../../09-assembly/{sample_id}/{sample_id}/{sample_id}_scaffolds.fasta -m -p nucmer -o {sample_id}_abacas
+
+
+
+
+
+
